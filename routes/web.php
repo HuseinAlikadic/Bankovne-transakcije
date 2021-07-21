@@ -28,3 +28,5 @@ Route::get('/transakcije-korisnika', [App\Http\Controllers\TransactionController
 Route::post('/transakcije-pojedinacne', [App\Http\Controllers\TransactionController::class, 'pojedinacne_transakcije_izmedzu_racuna'])->name('TransakcijeKorisnikaPojedinacne');
 Route::get('/novi-racun', [App\Http\Controllers\CustomerController::class, 'otvaranje_novog_racuna'])->name('OtvaranjeNovogRacuna');
 Route::post('/kreiran-novi-racun', [App\Http\Controllers\CustomerController::class, 'kreiranje_novog_racuna'])->name('KreiranjeNovogRacuna');
+Route::get('/kreiran-novi-kredit', [App\Http\Controllers\CustomerController::class, 'kreiranje_novog_kredita'])->name('KreiranjeNovogKredita');
+Route::post('/novi-kredit-kreiran', [App\Http\Controllers\CustomerController::class, 'spasavanje_u_bazu_novog_racuna'])->name('NoviKreditSpasen');

@@ -13,26 +13,29 @@
                 <div class="col">
                     <div class="form-group">
                         <label for="sel1">Select korisnika:</label>
-                        <select class="form-control">
+                        <select class="form-control" name="custumer_id" required>
                             <option value="">Select</option>
-                            <option value="" v-for="item in kreiranjeNovogRacuna">@{{item.custumer_id}}</option>
+                            <option :value="item.id" v-for="item in zaKorisnika">@{{item.imeIprezime}}
+                            </option>
                         </select>
                     </div>
                 </div>
                 <div class="col">
                     <label for="sel1">Broj računa:</label>
-                    <input type="number" class="form-control" placeholder="Enter password">
+                    <input type="number" class="form-control" name="broj_racuna" required>
                 </div>
                 <div class="col">
                     <label for="sel1">Iznos uplate:</label>
-                    <input type="number" class="form-control" placeholder="Enter password">
+                    <input type="number" class="form-control" name="bilans_racuna" required>
                 </div>
                 <div class="col">
 
                     <div class="form-group">
                         <label for="sel1">Select finansiske institucije:</label>
-                        <select class="form-control" id="sel1">
-                            <option>1</option>
+                        <select class="form-control" name="financial_institution_id" required>
+                            <option value="">Select</option>
+                            <option :value="item.id" v-for="item in finansiskeInstitucije">@{{item.name_of_bank}}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -43,7 +46,11 @@
         </form>
     </div>
     <br>
-
+    @if (session('noviRacun'))
+    <div class="alert alert-danger" role="alert">
+        {{ session('noviRacun') }}
+    </div>
+    @endif
 </div>
 @endsection
 @section('VuePodaci')
@@ -53,7 +60,9 @@ var app = new Vue({
     name: 'OtvaranjeNovogRacuna',
     data: function() {
         return {
-            kreiranjeNovogRacuna: <?=$kreiranjeNovogRacuna?>
+            finansiskeInstitucije: <?=$finansiskeInstitucije?>,
+            zaKorisnika: <?=$zaKorisnika?>,
+
         }
     },
 });

@@ -7,6 +7,7 @@
         <a a href="{{ route('IspisKorisnika') }}" type="button" class="btn btn-secondary">Lista korisnika</a>
         <a a href="{{ route('TransakcijeKorisnika') }}" type="button" class="btn btn-secondary">Transakcije</a>
         <a a href="{{ route('OtvaranjeNovogRacuna') }}" type="button" class="btn btn-secondary">Otvaranje računa</a>
+        <a a href="{{ route('KreiranjeNovogKredita') }}" type="button" class="btn btn-secondary">Novi kredit</a>
     </div>
     <br>
     <div>
