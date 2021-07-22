@@ -119,4 +119,14 @@ class CustomerController extends Controller
       // ->get();
       return view('ispis_korisnika/ispis_racuna_po_korisniku')->with($myArray);
     }
+
+    public function ispis_kredita_po_korisniku()
+    {
+      $myArray['kreditiKorisnika']=Credit::leftJoin('customers','customers.id','=','credits.custumer_id')
+      ->select(DB::raw('CONCAT(customers.first_name," ",customers.last_name)AS imePrezime'),'credits.original_term','credits.remaining_term','credits.credit_amount','credits.curent_credit_amount')
+      ->orderBy('imePrezime')
+      ->get();
+      
+      return view('ispis_korisnika/ispis_kredita')->with($myArray);
+    }
 }
