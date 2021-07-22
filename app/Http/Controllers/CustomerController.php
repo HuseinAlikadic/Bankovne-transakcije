@@ -85,8 +85,38 @@ class CustomerController extends Controller
 
     public function spasavanje_u_bazu_novog_racuna(Request $request)
     {
-dd($request);
 
-      return redirect('kreiran-novi-kredit');
+      $noviKreditZaPostojeceKorisnike= new Credit;
+
+      $noviKreditZaPostojeceKorisnike->custumer_id=$request->custumer_id;
+      $noviKreditZaPostojeceKorisnike->original_term=$request->original_term;
+      $noviKreditZaPostojeceKorisnike->remaining_term=$request->remaining_term;
+      $noviKreditZaPostojeceKorisnike->credit_amount=$request->credit_amount;
+      $noviKreditZaPostojeceKorisnike->curent_credit_amount=$request->curent_credit_amount;
+      $noviKreditZaPostojeceKorisnike->save();
+
+      // Prilikom uplate potrebno je smanjivati vrijednost kolone curent_credit_amount   kada dođem do zadatka
+
+      return redirect('kreiran-novi-kredit')->with('kreiran','Uspiješno dodan kredit');
+    }
+
+    public function ispis_racuna_po_korisniku()
+    {
+      $myArray['sviRacuniOdKorisnika']=Account::leftJoin('customers','accounts.custumer_id','=','customers.id')
+      ->select(DB::raw('CONCAT(customers.first_name," ",customers.last_name) AS imeIprezime'),
+      'accounts.broj_racuna','accounts.bilans_racuna','accounts.custumer_id')
+      ->orderBy('imeIprezime')
+      ->get();
+     
+
+      //prikaz sume vrijednosti bilanse korisnika 
+      // $myArray['sviRacuniOdKorisnika']=Account::leftJoin('customers','accounts.custumer_id','=','customers.id')
+      // ->selectRaw( 'CONCAT(customers.first_name," ",customers.last_name) AS imeIprezime ,
+      //          sum(accounts.bilans_racuna) AS bb ,
+      // accounts.broj_racuna,accounts.bilans_racuna,accounts.custumer_id')
+      // ->orderBy('imeIprezime','ASC')
+      // ->groupBy('imeIprezime')
+      // ->get();
+      return view('ispis_korisnika/ispis_racuna_po_korisniku')->with($myArray);
     }
 }
