@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
+        <div class="row justify-content-center ">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">Example Component</div>
 
@@ -15,9 +15,14 @@
 </template>
 
 <script>
-    export default {
-        mounted() {
-            console.log('Component mounted.')
-        }
+export default {
+    data: function() {
+        return {
+            count: 0
+        };
+    },
+    mounted() {
+        console.log("Component mounted.");
     }
+};
 </script>

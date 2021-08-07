@@ -159,12 +159,9 @@ class CustomerController extends Controller
         $id_from_account=$request->get('id_from_account');
         $id_to_account=$request->get('id_to_account');
         $iznos_transakcije=$request->get('money_value'); 
-        //data for account from
-        $account_from_biance=Account::where('id',$id_from_account)->value('bilans_racuna');
-        $account_from_financial_institution_id=Account::where('id',$id_from_account)->value('financial_institution_id');
-        //data for account to
-        $account_to_bilance=Account::where('id',$id_to_account)->value('bilans_racuna'); 
-        $account_to_financial_institution_id=Account::where('id',$id_to_account)->value('financial_institution_id');
+     //knjiženje promjena sa računa na račun(account)
+     $account_from_financial_institution_id=Account::where('id',$id_from_account)->value('financial_institution_id');
+
 
         $novaTransakcija= new PostingKnjizenje;
         $novaTransakcija->money_value=$iznos_transakcije;
@@ -174,17 +171,23 @@ class CustomerController extends Controller
         $novaTransakcija->booking_date=Carbon::now()->format('Y-m-d');
         $novaTransakcija->save(); 
         
-        $bilansRacunaAccountaFrom=$account_from_biance-$iznos_transakcije;
+        //smanjujem vrijednost bilansa accountu from
+        $account_from_biance_orginalni=Account::where('id',$id_from_account)->value('bilans_racuna');
+        
+        $bilansRacunaAccountaFrom=$account_from_biance_orginalni-$iznos_transakcije;
         $updateAccountFrom=Account::find($id_from_account);
         $updateAccountFrom->bilans_racuna=$bilansRacunaAccountaFrom;
         $updateAccountFrom->save();
+
+        //povećanje vrijednost bilansa accountu to
+        $account_to_bilance=Account::where('id',$id_to_account)->value('bilans_racuna'); 
         // dd($updateAccountFrom);
 
         $bilansAccountTo=$account_to_bilance+$iznos_transakcije;
         $updateAccountTo=Account::find($id_to_account);
         $updateAccountTo->bilans_racuna=$bilansAccountTo;
         $updateAccountTo->save();
-        dd($updateAccountTo);
+        
         DB::commit();
    
       return redirect('/transakcija-kredita');

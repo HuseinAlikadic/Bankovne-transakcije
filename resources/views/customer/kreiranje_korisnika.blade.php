@@ -32,7 +32,9 @@
                             </div>
                             <div class="form-group">
                                 <label for="usr">Datum rođenja:</label>
-                                <input type="date" class="form-control" name="date_of_birth" required>
+                                <input id="datepicker" type="date" class="form-control date-of-birth-change-format " name="date_of_birth" required>
+                                {{-- kada bi mijenjao format datuma preko vue komponente --}}
+                                {{-- <vuejs-datepicker :language="fr"></vuejs-datepicker> --}}
                             </div>
                             <!-- <p>@error('date_of_birth') {{$message}} @enderror</p> -->
                             <div class="form-group">
@@ -100,6 +102,9 @@ var app = new Vue({
             rejtingKupca: <?=$rejtingKupca?>,
             noviKorisnici: {}
         }
+    },
+    mounted() {
+     
     },
     methods: {
         dodajKorisnika: function() {
