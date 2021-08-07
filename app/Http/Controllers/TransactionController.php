@@ -27,6 +27,7 @@ class TransactionController extends Controller
         $acountFrom=$request->get('id_from_account');
         $acountTo=$request->get('id_to_account');
         $iznos_transakcije=$request->get('money_value');
+        // dd($iznos_transakcije);
         // acount from podaci
         $accountFromBilance=Account::where('id','=',$acountFrom)->value('bilans_racuna');
         $finansiskaInstitucijaTransakcija=Account::where('id','=',$acountFrom)->value('financial_institution_id');
@@ -71,7 +72,7 @@ class TransactionController extends Controller
     }catch (\Exception $e) {
         DB::rollback();
        Log::info( $e->getMessage());
-        return redirect('/transakcije-korisnika')->with('upozorenje','Neka poruka za korisnika da nisu podaci OK');
+        return redirect('/transakcije-korisnika')->with(['upozorenje','Neka poruka za korisnika da nisu podaci OK']);
     }
 
     }

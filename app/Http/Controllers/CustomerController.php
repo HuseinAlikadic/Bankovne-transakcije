@@ -9,6 +9,10 @@ use App\Models\Account;
 use Illuminate\Support\Facades\DB;
 use App\Models\FinancialInstitution;
 use App\Models\Credit;
+use App\Models\PostingKnjizenje;
+use Carbon\carbon;
+use App\Services\PayUService\Exception;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
@@ -65,7 +69,7 @@ class CustomerController extends Controller
     public function kreiranje_novog_racuna(Request $request)
     {
       $noviRacunZaPostojecegKorisnika = new Account;
-      $noviRacunZaPostojecegKorisnika->custumer_id=$request->custumer_id;
+      $noviRacunZaPostojecegKorisnika->custumer_id=$request->custumer_i;
       $noviRacunZaPostojecegKorisnika->broj_racuna=$request->broj_racuna;
       $noviRacunZaPostojecegKorisnika->bilans_racuna=$request->bilans_racuna;
       $noviRacunZaPostojecegKorisnika->financial_institution_id=$request->financial_institution_id;
@@ -140,4 +144,57 @@ class CustomerController extends Controller
       
       return view('ispis_korisnika/ispis_kredita')->with($myArray);
     }
+
+    public function pojedinacne_transakcije_korisnika()
+    {
+    $myArray['korisnici']=Account::all();
+
+      return view('customer/transakcije_korisnika_vjezba')->with($myArray);
+    }
+
+    public function transakcije_korisnika_pojedinacne(Request $request)
+    {
+      DB::beginTransaction();
+    try {
+        $id_from_account=$request->get('id_from_account');
+        $id_to_account=$request->get('id_to_account');
+        $iznos_transakcije=$request->get('money_value'); 
+        //data for account from
+        $account_from_biance=Account::where('id',$id_from_account)->value('bilans_racuna');
+        $account_from_financial_institution_id=Account::where('id',$id_from_account)->value('financial_institution_id');
+        //data for account to
+        $account_to_bilance=Account::where('id',$id_to_account)->value('bilans_racuna'); 
+        $account_to_financial_institution_id=Account::where('id',$id_to_account)->value('financial_institution_id');
+
+        $novaTransakcija= new PostingKnjizenje;
+        $novaTransakcija->money_value=$iznos_transakcije;
+        $novaTransakcija->id_from_account=$id_from_account;
+        $novaTransakcija->id_to_account=$id_to_account;
+        $novaTransakcija->financial_institutions_id=$account_from_financial_institution_id;
+        $novaTransakcija->booking_date=Carbon::now()->format('Y-m-d');
+        $novaTransakcija->save(); 
+        
+        $bilansRacunaAccountaFrom=$account_from_biance-$iznos_transakcije;
+        $updateAccountFrom=Account::find($id_from_account);
+        $updateAccountFrom->bilans_racuna=$bilansRacunaAccountaFrom;
+        $updateAccountFrom->save();
+        // dd($updateAccountFrom);
+
+        $bilansAccountTo=$account_to_bilance+$iznos_transakcije;
+        $updateAccountTo=Account::find($id_to_account);
+        $updateAccountTo->bilans_racuna=$bilansAccountTo;
+        $updateAccountTo->save();
+        dd($updateAccountTo);
+        DB::commit();
+   
+      return redirect('/transakcija-kredita');
+     } 
+    catch (\Exception $e) {
+      DB::rollback();
+      Log::info( $e->getMessage());
+
+      return redirect('/transakcija-kredita')->with('upozorenje','There was an error');
+    }
+    }
+    
 }

@@ -10,6 +10,7 @@
         <a a href="{{ route('KreiranjeNovogKredita') }}" type="button" class="btn btn-secondary">Novi kredit</a>
         <a a href="{{ route('IspisRacuna') }}" type="button" class="btn btn-secondary">Ispis računa</a>
         <a a href="{{ route('IspisKredita') }}" type="button" class="btn btn-secondary">Ispis kredita</a>
+        <a a href="{{ route('TransakcijeKorisnikaVjezba') }}" type="button" class="btn btn-secondary">Transakcije korisnika 2</a>
     </div>
     <br>
     <div>

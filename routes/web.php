@@ -31,4 +31,6 @@ Route::post('/kreiran-novi-racun', [App\Http\Controllers\CustomerController::cla
 Route::get('/kreiran-novi-kredit', [App\Http\Controllers\CustomerController::class, 'kreiranje_novog_kredita'])->name('KreiranjeNovogKredita');
 Route::post('/novi-kredit-kreiran', [App\Http\Controllers\CustomerController::class, 'spasavanje_u_bazu_novog_racuna'])->name('NoviKreditSpasen');
 Route::get('/ispis-racuna', [App\Http\Controllers\CustomerController::class, 'ispis_racuna_po_korisniku'])->name('IspisRacuna');
-Route::get('/ispis-kredita', [App\Http\Controllers\CustomerController::class, 'ispis_kredita_po_korisniku'])->name('IspisKredita');
+Route::get('/ispis-kredita', [App\Http\Controllers\CustomerController::class, 'ispis_kredita_po_korisniku'])->name('IspisKredita'); 
+Route::get('/transakcija-kredita', [App\Http\Controllers\CustomerController::class, 'pojedinacne_transakcije_korisnika'])->name('TransakcijeKorisnikaVjezba');
+Route::post('/transakcija-kredita-pojedinacne', [App\Http\Controllers\CustomerController::class, 'transakcije_korisnika_pojedinacne'])->name('TransakcijeKorisnikaVjezbaPojedinacne');
